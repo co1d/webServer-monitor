@@ -44,8 +44,8 @@ public class HttpClientUtils
         {
             cm =new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         }
-        cm.setMaxTotal(200);//多线程调用注意配置，根据线程数设定
-        cm.setDefaultMaxPerRoute(200);//多线程调用注意配置，根据线程数设定
+        cm.setMaxTotal(20);//多线程调用注意配置，根据线程数设定
+        cm.setDefaultMaxPerRoute(20);//多线程调用注意配置，根据线程数设定
     }
 
     private static CloseableHttpClient getHttpClient() 
@@ -80,7 +80,7 @@ public class HttpClientUtils
                     return result;
                 }else
                 {
-                    return null;
+                    return statusCode+"";
                 }
             }
             return null;

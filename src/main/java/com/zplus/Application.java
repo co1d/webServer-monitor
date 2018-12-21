@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-
-import java.util.*;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * Hello world!
@@ -16,11 +16,12 @@ import java.util.*;
  */
 @SpringBootApplication
 @EnableCaching
+@EnableScheduling
 @MapperScan("com.zplus.repository")
 public class Application implements CommandLineRunner
 {
     @Autowired
-    private AsyncController controller;
+    private AsyncController asyncController;
     
     @Autowired
     private MessageProducerService producerService;
@@ -35,20 +36,12 @@ public class Application implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
-        List<String> urlList=new ArrayList<>();
-        urlList.add("http://srsm.ihzsr.cn/sql/message");
-        urlList.add("http://www.baidu.com");
-        urlList.add("http://srsm.ihzsr.cn/sql/message");
-        urlList.add("http://srsm.ihzsr.cn/sql/message");
-        urlList.add("http://srsm.ihzsr.cn/sql/message");
-        //producerService.sendMessage(doHttpGet(urlList));
+        sendToMQ();
     }
     
-    public List<String> doHttpGet(List<String> url) throws Exception
+    @Scheduled(cron = "${task.schedule}")
+    public void sendToMQ() throws Exception
     {
-        List<String> result=new ArrayList<>();
-        for(String v:url)
-            result.add(controller.httpRequest(v));
-        return result;
+        producerService.sendMessage(asyncController.doAsyncServiceHttpGet());
     }
 }

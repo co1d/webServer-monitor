@@ -1,5 +1,8 @@
 package com.zplus.service;
 
-public class RedisService
+import java.util.Map;
+
+public interface RedisService
 {
+    void save(Map<String,String> map);
 }

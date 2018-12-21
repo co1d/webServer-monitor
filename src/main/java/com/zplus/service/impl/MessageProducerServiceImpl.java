@@ -18,7 +18,7 @@ public class MessageProducerServiceImpl implements MessageProducerService
     private Queue queue;
     
     @Override
-    public void sendMessage(List<String> httpGetRequest)
+    public void sendMessage(List<?> httpGetRequest)
     {
         this.jmsTemplate.convertAndSend(this.queue,httpGetRequest);
     }
