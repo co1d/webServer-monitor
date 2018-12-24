@@ -3,6 +3,7 @@ package com.zplus.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 public class Person implements Serializable
 {
     private static final long serialVersionUID = -5598548936290354797L;

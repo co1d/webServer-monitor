@@ -1,6 +1,6 @@
 package com.zplus.controller;
 
-import com.zplus.entity.IURL;
+import com.zplus.entity.IUrl;
 import com.zplus.service.AsyncService;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.PropertySource;
@@ -30,7 +30,7 @@ public class AsyncController
     
     public List<?> doAsyncServiceHttpGet() throws Exception
     {
-        List<IURL> list=setIURL();
+        List<IUrl> list=setIURL();
         return list.stream().map(a -> CompletableFuture.supplyAsync(() -> {
             Map<String,String> map=new HashMap<>();
             map.put(a.getUrl(),a.doHttpGet(a.getUrl()));
@@ -38,11 +38,11 @@ public class AsyncController
         },executor)).collect(Collectors.toList()).stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
     
-    private List<IURL> setIURL()
+    private List<IUrl> setIURL()
     {
-        List<IURL> list=new ArrayList<>();
+        List<IUrl> list=new ArrayList<>();
         for(String s:urlList)
-            list.add(new IURL(s));
+            list.add(new IUrl(s));
         return list;
     }
     

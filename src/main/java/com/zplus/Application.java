@@ -2,7 +2,6 @@ package com.zplus;
 
 import com.zplus.controller.AsyncController;
 import com.zplus.service.MessageProducerService;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @SpringBootApplication
 @EnableCaching
 @EnableScheduling
-@MapperScan("com.zplus.repository")
+//@MapperScan("com.zplus.repository")
 public class Application implements CommandLineRunner
 {
     @Autowired
@@ -36,7 +35,12 @@ public class Application implements CommandLineRunner
     @Override
     public void run(String... args) throws Exception
     {
-        sendToMQ();
+        //sendToMQ();
+        //RedisServiceImpl controller=new RedisServiceImpl();
+        //controller.tet();
+
+        //UserServiceImpl userService=new UserServiceImpl();
+        //userService.getById(5L);
     }
     
     @Scheduled(cron = "${task.schedule}")

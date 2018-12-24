@@ -1,21 +1,22 @@
 package com.zplus.service;
 
+import com.zplus.dao.UserDao;
 import com.zplus.entity.User;
-import com.zplus.repository.UserMapper;
 import org.springframework.cache.annotation.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl
 {
     @Resource
-    private UserMapper userMapper;
+    private UserDao userDao;
 
 
     public User saveUser(User user) {
-        userMapper.save(user);
+        userDao.save(user);
         // 返回用户信息，带id
         return user;
     }
@@ -27,9 +28,9 @@ public class UserServiceImpl
      * @return
      */
     @CacheEvict(value = "user", key = "#root.args[0]", condition = "#result eq true")
-    public Boolean removeUser(Long id) {
+    public void removeUser(Long id) {
         // 如果删除记录不为1  则是失败
-        return userMapper.deleteById(id) == 1;
+        userDao.deleteById(id);
     }
 
     /**
@@ -39,9 +40,9 @@ public class UserServiceImpl
      * @param id 主键id
      * @return
      */
-    @Cacheable(value = "user", key = "#root.args[0]", unless = "#result eq null ")
-    public User getById(Long id) {
-        return userMapper.selectById(id);
+    @Cacheable(value = "user", keyGenerator = "cacheKeyGenerator")
+    public Optional<User> getById(Long id) {
+        return userDao.findById(id);
     }
 
     /**
@@ -51,7 +52,7 @@ public class UserServiceImpl
      */
     @CachePut(value = "user", key = "#root.args[0]", unless = "#user eq null ")
     public User updateUser(User user) {
-        userMapper.update(user);
+        userDao.saveAndFlush(user);
         return user;
     }
 }
